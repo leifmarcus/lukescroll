@@ -10,6 +10,7 @@ body, html
     height      : 100%;
     font-family : 'Montserrat', sans-serif;
     background  : #000;
+    overflow-y: scroll;
     -webkit-overflow-scrolling: auto;
 }
 /*
@@ -20,17 +21,21 @@ body, html
     font-size   : 16px;
     line-height : 24px;
 }
+
 .headline-font
 {
     font-size   : 40px;
     line-height : 48px;
     text-align  : center;
+    margin      : 48px 0;
 }
+
 .landing-font
 {
     font-size   : 24px;
     line-height : 36px;
 }
+
 /* styles for phones: */
 @media screen and ( max-width: 768px ) {
     .landing-font
@@ -42,6 +47,22 @@ body, html
     {
         font-size   : 24px;
         line-height : 36px;
+        margin      : 36px 0;
+    }
+}
+
+/* styles for tablets: */
+@media screen and ( min-width : 769px ) and ( max-width : 1100px ) {
+    .landing-font
+    {
+        font-size   : 16px;
+        line-height : 24px;
+    }
+    .headline-font
+    {
+        font-size   : 36px;
+        line-height : 40px;
+        margin      : 40px 0;
     }
 }
 
@@ -50,6 +71,7 @@ a, a:link
 {
     color: #ffff00;
 }
+
 /* Scroll setup: */
 .container
 {
@@ -58,6 +80,7 @@ a, a:link
     position    : absolute;
     font-weight : bold;
 }
+
 .perspective
 {
     position         : fixed;
@@ -67,6 +90,7 @@ a, a:link
     height           : 100%;
     overflow         : hidden;
 }
+
 .scroller
 {
     padding-top : 100px;
@@ -75,10 +99,19 @@ a, a:link
     width       : 50%;
     margin      : 0 auto;
 }
+
 @media screen and ( max-width: 768px )
 {
     .scroller
     {
         width: 80%;
+    }
+}
+
+/* styles for tablets: */
+@media screen and ( min-width : 769px ) and ( max-width : 1100px ) {
+    .scroller
+    {
+        width: 70%;
     }
 }

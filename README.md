@@ -10,6 +10,7 @@ scrolling like starwars would do
     <div class="scroller">
     	<!-- all content goes here --> 
     </div>
+    <div class="edge"></div>
   </div>
 </div>
 ```
@@ -19,7 +20,10 @@ scrolling like starwars would do
 ```JavaScript
 window.onload = function()
 {
-  lukescroll( document.querySelector( '.container' ) );
+  lukescroll(
+  {
+    ...config object
+  } );
 };
 ```
 
@@ -35,26 +39,12 @@ window.onload = function()
 }
 .perspective
 {
-    position         : relative;
+    position         : fixed;
     top              : 0px;
-    transform-origin : 50% 0%;
-    transform        : perspective(270px) rotateX(40deg);
     overflow         : hidden;
 }
 
-/* gradient to hide the upper edge */
-.perspective:after
-{
-    position: absolute;
-    content: ' ';
-    left: 0;
-    right: 0;
-    top: 0;
-    height: 200px;
-    background-image: linear-gradient(top, rgba(255,255,255,1) 0%, transparent 100%);
-    background-image: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%, transparent 100%);
-    pointer-events: none;
-}
+
 
 /* the scrolling element */
 .scroller

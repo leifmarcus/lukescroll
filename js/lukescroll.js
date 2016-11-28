@@ -45,16 +45,18 @@
     /**
      *  Class Lukescroll
      *
-     *  @param  {Object} config - main config object
+     *  @param  {Object} customConfig - main config object
      *
      *  @return {object} - luke scroll object
      */
-    function Lukescroll( config )
+    function Lukescroll( customConfig )
     {
         var self = this;
 
+        var config = customConfig || {};
+
         /* Default configuration of the slider: */
-        var defaults =
+        var DEFAULTS =
             {
                 container      : '.container',    // selector for container
                 perspective    : '.perspective',  // selector for perspective
@@ -68,8 +70,8 @@
                 color          : '#FF0'           // text color
             };
 
-        /* merge defaults and custom config */
-        self.config = Object.assign( defaults, config );
+        /* merge DEFAULTS and custom config */
+        self.config = Object.assign( DEFAULTS, config );
 
         /**
          *  Lukescroll constructor
@@ -225,9 +227,15 @@
             return function scrollHandler()
             {
                 var top = window.scrollY;
-                // self.perspective.style.top = top + 'px';
-                //     ' translateY(' + top + 'px)';
-                self.scroller.style.top = -top + 'px';
+
+                self.scroller.style.transform =
+                        'translateY(' + -top + 'px)';
+
+                self.scroller.style.webkitTransform =
+                        'translateY(' + -top + 'px)';
+
+                self.scroller.style.mozTransform =
+                        'translateY(' + -top + 'px)';
             };
         }
     };
