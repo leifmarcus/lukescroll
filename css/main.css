@@ -9,13 +9,14 @@ body, html
 {
     height: 100%;
     font-family: 'Poppins', sans-serif;
+    background: #000;
+    -webkit-overflow-scrolling: auto;
 }
 .container
 {
     width: 100%;
     height: 100%;
     position: absolute;
-    top: 200px;
     font-weight: bold;
 }
 .perspective
@@ -23,24 +24,12 @@ body, html
     position         : relative;
     top              : 0px;
     /*left             : calc( 50% - 200px );*/
-    width            : 400px;
+    width            : 50%;
     height           : 100%;
     margin           : 0 auto;
     transform-origin : 50% 0%;
-    transform        : perspective(270px) rotateX(40deg);
+    transform        : perspective(50%) rotateX(40deg);
     overflow         : hidden;
-}
-.perspective:after
-{
-    position: absolute;
-    content: ' ';
-    left: 0;
-    right: 0;
-    top: 0;
-    height: 200px;
-    background-image: linear-gradient(top, rgba(255,255,255,1) 0%, transparent 100%);
-    background-image: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%, transparent 100%);
-    pointer-events: none;
 }
 .scroller
 {
@@ -48,4 +37,12 @@ body, html
     position    : relative;
     text-align  : justify;
 }
-
+h1
+{
+    font-size: 2em;
+    margin: 1em 0;
+}
+p
+{
+    margin: 1.5em 0;
+}
