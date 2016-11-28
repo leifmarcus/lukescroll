@@ -53,21 +53,22 @@
     {
         var self = this;
 
-
+        /* Default configuration of the slider: */
         var defaults =
             {
-                container      : '.container',
-                perspective    : '.perspective',
-                scroller       : '.scroller',
-                edge           : '.edge',
-                edgeHeight     : 200,
-                cssRotate      : 30,
-                cssPerspective : 250,
-                origin         : '50% 20%',
-                bgColor        : 'rgba(0,0,0,1)',
-                color          : '#FF0'
+                container      : '.container',    // selector for container
+                perspective    : '.perspective',  // selector for perspective
+                scroller       : '.scroller',     // selector for scroll element
+                edge           : '.edge',         // selector for edge overlay
+                edgeHeight     : 400,             // selector for edge height
+                cssRotate      : 30,              // rotation value
+                cssPerspective : 300,             // perspective value in px
+                origin         : '50% 80%',      // cass transform origin
+                bgColor        : 'rgba(0,0,0,1)', // background color
+                color          : '#FF0'           // text color
             };
 
+        /* merge defaults and custom config */
         self.config = Object.assign( defaults, config );
 
         /**
@@ -77,23 +78,12 @@
          */
         self.construct = function()
         {
-            self.container   = document.querySelector( self.config.container );
-            self.perspective = document.querySelector( self.config.perspective );
-            self.scroller    = document.querySelector( self.config.scroller );
-            self.edge        = document.querySelector( self.config.edge );
-
+            this.setElements();
             this.buildEdge();
-
-            self.container.style.cssText =
-                'background-color:' + self.config.bgColor + ';' +
-                'color:' + self.config.color + ';';
-
-            self.perspective.style.cssText =
-                'transform: perspective(' + self.config.cssPerspective + 'px) ' +
-                'rotateX(' + self.config.cssRotate + 'deg);' +
-                'transform-origin:' + self.config.origin + ';';
+            this.setStyles();
 
             window.addEventListener( 'load', self.onLoad.call( self ) );
+            window.addEventListener( 'resize', self.onResize.call( self ) );
             window.addEventListener( 'scroll', self.onScroll.call( self ), false );
         };
 
@@ -106,6 +96,7 @@
          */
         self.destroy = function()
         {
+            window.removeEventListener( 'resize' );
             window.removeEventListener( 'load' );
             window.removeEventListener( 'scroll' );
         };
@@ -117,6 +108,48 @@
 
     Lukescroll.prototype =
     {
+        /**
+         *  set Styles
+         *
+         *  sets initial state of the styles for the scroller
+         *
+         *  @returns {Undefined} - no return
+         */
+        setStyles : function()
+        {
+            this.container.style.cssText =
+                'background-color:' + this.config.bgColor + ';' +
+                'color:' + this.config.color + ';';
+
+            this.perspective.style.cssText =
+                'transform-origin:' + this.config.origin + ';' +
+                'transform: perspective(' + this.config.cssPerspective + 'px) ' +
+                'rotateX(' + this.config.cssRotate + 'deg);';
+
+            this.scroller.style.paddingTop = this.config.edgeHeight + 'px';
+        },
+
+        /**
+         *  setElements
+         *
+         *  sets a reference to the used elements
+         *
+         *  @returns {Undefined} - no return
+         */
+        setElements : function()
+        {
+            this.container   = document.querySelector( this.config.container );
+            this.perspective = document.querySelector( this.config.perspective );
+            this.scroller    = document.querySelector( this.config.scroller );
+            this.edge        = document.querySelector( this.config.edge );
+        },
+        /**
+         *  build edge overlay:
+         *
+         *  builds the upper edge overlay to fadeout text
+         *
+         *  @returns {Undefined} - no return
+         */
         buildEdge : function()
         {
             this.edge.style.cssText =
@@ -132,6 +165,41 @@
                 this.config.bgColor + ' 0%, rgba(0,0,0,0) 100%);' +
                 'pointer-events: none;';
         },
+        /**
+         *  set container height
+         *
+         *  set the height of the container to have
+         *  enough space to scroll
+         *
+         *  @returns {Undefined} - no return
+         */
+        setContainerHeight : function()
+        {
+            var height = Math.ceil( this.scroller.offsetHeight +
+                                   this.top + this.config.edgeHeight );
+            this.container.style.height     = height + 'px';
+        },
+
+        /**
+         *  resize handler wrapper for binding this
+         *
+         *  @return {Function} resize handler function
+         */
+        onResize : function()
+        {
+            var self = this;
+
+            return function()
+            {
+                self.setContainerHeight();
+            };
+        },
+
+        /**
+         *  load handler wrapper for binding this
+         *
+         *  @return {Function} load handler function
+         */
         onLoad : function()
         {
             var self = this;
@@ -139,10 +207,9 @@
             return function loadHandler()
             {
                 self.top = self.container.getBoundingClientRect().top;
-                var height = Math.ceil( self.scroller.offsetHeight +
-                                       self.top + self.config.edgeHeight );
 
-                self.container.style.height     = height + 'px';
+                self.setContainerHeight();
+
                 self.container.style.visibility = 'visible';
             };
         },
@@ -158,10 +225,9 @@
             return function scrollHandler()
             {
                 var top = window.scrollY;
-                self.perspective.style.top = top + 'px';
+                // self.perspective.style.top = top + 'px';
                 //     ' translateY(' + top + 'px)';
-                self.scroller.style.cssText =
-                    'top: ' + -top + 'px';
+                self.scroller.style.top = -top + 'px';
             };
         }
     };
